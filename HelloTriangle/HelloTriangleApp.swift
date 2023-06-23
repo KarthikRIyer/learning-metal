@@ -11,7 +11,7 @@ import SwiftUI
 struct HelloTriangleApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            appView()
         }
     }
 }
