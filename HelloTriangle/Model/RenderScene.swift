@@ -9,24 +9,24 @@ import Foundation
 
 class RenderScene {
     var camera: Camera
-    var triangles: [SimpleComponent]
+    var cubes: [SimpleComponent]
     
     init() {
-        camera = Camera(position: [0.0, 0.0, 0.0],
-                        eulers: [0.0, 90.0, 0.0])
+        camera = Camera(position: [-5.0, 0.0, 2.5],
+                        eulers: [0.0, 110.0, 0.0])
         
-        triangles = [
-            SimpleComponent(position: [05, 0.0, 0.0],
+        cubes = [
+            SimpleComponent(position: [3, 0.0, 0.0],
                             eulers: [0.0, 0.0, 0.0])
         ]
     }
     
     func update() {
         camera.updateVectors()
-        for triangle in triangles {
-            triangle.eulers.z += 1
-            if triangle.eulers.z > 360 {
-                triangle.eulers.z -= 360
+        for cube in cubes {
+            cube.eulers.z += 1
+            if cube.eulers.z > 360 {
+                cube.eulers.z -= 360
             }
         }
     }
