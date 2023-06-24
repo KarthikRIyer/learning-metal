@@ -17,7 +17,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var scene: RenderScene
     let mesh: ObjMesh
     
-    init(_ parent: ContentView) {
+    init(_ parent: ContentView, scene: RenderScene) {
         self.parent = parent
         if let metalDevice = MTLCreateSystemDefaultDevice() {
             self.metalDevice = metalDevice
@@ -40,7 +40,7 @@ class Renderer: NSObject, MTKViewDelegate {
               fatalError("could not create pipeline")
         }
          
-        scene = RenderScene()
+        self.scene = scene 
         super.init()
     }
     
@@ -78,7 +78,7 @@ class Renderer: NSObject, MTKViewDelegate {
             renderEncoder?.setVertexBytes(&modelMatrix, length: MemoryLayout<matrix_float4x4>.stride, index: 1)
             
             for submesh in mesh.metalMesh.submeshes {
-                renderEncoder?.drawIndexedPrimitives(type: .line,
+                renderEncoder?.drawIndexedPrimitives(type: .triangle,
                                                      indexCount: submesh.indexCount,
                                                      indexType: submesh.indexType,
                                                      indexBuffer: submesh.indexBuffer.buffer,

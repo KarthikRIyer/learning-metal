@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct HelloTriangleApp: App {
+    
+    @StateObject  private var renderScene = RenderScene()
+    
     var body: some Scene {
         WindowGroup {
-            appView()
+            appView().environmentObject(renderScene)
         }
     }
 }

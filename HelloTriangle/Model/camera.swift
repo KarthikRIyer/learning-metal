@@ -31,7 +31,7 @@ class Camera {
         ]
         
         let globalUp: vector_float3 = [0.0, 0.0, 1.0]
-        right = simd.cross(globalUp, forwards)
-        up = simd.cross(forwards, right)
+        right = simd.normalize(simd.cross(globalUp, forwards))
+        up = simd.normalize(simd.cross(forwards, right))
     }
 }

@@ -7,9 +7,9 @@
 
 import Foundation
 
-class RenderScene {
-    var camera: Camera
-    var cubes: [SimpleComponent]
+class RenderScene: ObservableObject {
+    @Published var camera: Camera
+    @Published var cubes: [SimpleComponent]
     
     init() {
         camera = Camera(position: [-5.0, 0.0, 2.5],
@@ -29,5 +29,25 @@ class RenderScene {
                 cube.eulers.z -= 360
             }
         }
+    }
+    
+    func spinCamera(offset: CGSize) {
+        let dTheta: Float = Float(offset.width)
+        let dPhi: Float = Float(offset.height)
+        
+        camera.eulers.z -= 0.001 * dTheta
+        camera.eulers.y += 0.001 * dPhi
+        
+        if camera.eulers.z < 0 || camera.eulers.z > 360{
+            camera.eulers.z -= 360
+        }
+        
+        if camera.eulers.y < 1 {
+            camera.eulers.y = 1
+        } else if camera.eulers.y > 179 {
+            camera.eulers.y = 179
+        }
+        
+        camera.updateVectors()
     }
 }
