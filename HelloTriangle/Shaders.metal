@@ -12,11 +12,12 @@ using namespace metal;
 
 struct VertexIn {
     float4 position [[ attribute(0) ]];
+    float2 texcoord [[ attribute(1) ]];
 };
 
 struct Fragment {
     float4 position [[position]];
-    float4 color;
+    float2 texcoord;
 };
 
 vertex Fragment vertexShader(const VertexIn vertex_in [[ stage_in ]],
@@ -26,10 +27,12 @@ vertex Fragment vertexShader(const VertexIn vertex_in [[ stage_in ]],
     
     Fragment output ;
     output.position = camera.projection *  camera.view * model * vertex_in.position;
-    output.color = float4(0.6, 0.3, 0.3, 1.0);
+    output.texcoord = vertex_in.texcoord;
     return output;
 }
 
-fragment float4 fragmentShader(Fragment input [[stage_in]]) {
-    return input.color;
+fragment float4 fragmentShader(Fragment input [[stage_in]],
+                               texture2d<float> objectTexture [[texture(0)]],
+                               sampler samplerObject[[ sampler(0) ]]) {
+    return objectTexture.sample(samplerObject, input.texcoord);
 }

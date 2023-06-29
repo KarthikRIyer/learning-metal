@@ -13,9 +13,12 @@ class Renderer: NSObject, MTKViewDelegate {
     var metalDevice: MTLDevice!
     var metalCommandQueue: MTLCommandQueue!
     var allocator: MTKMeshBufferAllocator
+    let materialLoader: MTKTextureLoader
     let pipelineState: MTLRenderPipelineState
+    let depthStencilState: MTLDepthStencilState
     var scene: RenderScene
     let mesh: ObjMesh
+    let material: Material
     
     init(_ parent: ContentView, scene: RenderScene) {
         self.parent = parent
@@ -24,6 +27,8 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         self.metalCommandQueue = metalDevice.makeCommandQueue()
         self.allocator = MTKMeshBufferAllocator(device: metalDevice)
+        self.materialLoader = MTKTextureLoader(device: metalDevice)
+        material = Material(device: metalDevice, allocator: materialLoader, filename: "arty")
         
         mesh = ObjMesh(device: metalDevice, allocator: allocator, filename: "cube")
         
@@ -33,6 +38,12 @@ class Renderer: NSObject, MTKViewDelegate {
         pipelineDescriptor.fragmentFunction = library?.makeFunction(name: "fragmentShader")
         pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         pipelineDescriptor.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(mesh.metalMesh.vertexDescriptor)
+        pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
+        
+        let depthStencilDescriptor = MTLDepthStencilDescriptor()
+        depthStencilDescriptor.depthCompareFunction = .less
+        depthStencilDescriptor.isDepthWriteEnabled = true
+        depthStencilState = metalDevice.makeDepthStencilState(descriptor: depthStencilDescriptor)!
         
         do {
             try pipelineState = metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
@@ -60,6 +71,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let renderEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor!)
         renderEncoder?.setRenderPipelineState(pipelineState)
+        renderEncoder?.setDepthStencilState(depthStencilState)
         
         var cameraData: CameraParameters = CameraParameters()
         cameraData.view = Matrix44.create_lookat(eye: scene.camera.position,
@@ -71,6 +83,8 @@ class Renderer: NSObject, MTKViewDelegate {
                                                                         far: 10)
         renderEncoder?.setVertexBytes(&cameraData, length: MemoryLayout<CameraParameters>.stride, index: 2)
         renderEncoder?.setVertexBuffer(mesh.metalMesh.vertexBuffers[0].buffer, offset: 0, index: 0)
+        renderEncoder?.setFragmentTexture(material.texture, index: 0)
+        renderEncoder?.setFragmentSamplerState(material.sampler, index: 0)
         for cube in scene.cubes {
             
             var modelMatrix: matrix_float4x4 = Matrix44.create_from_rotation(eulers: cube.eulers)
