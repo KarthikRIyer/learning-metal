@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		254735BA2A4DD80300A93E55 /* material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254735B92A4DD80300A93E55 /* material.swift */; };
-		254735BC2A4DE71500A93E55 /* arty.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 254735BB2A4DE71500A93E55 /* arty.jpg */; };
 		254735BE2A4DF09F00A93E55 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254735BD2A4DF09F00A93E55 /* Entity.swift */; };
 		25BBA9522A460395006D255D /* appView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BBA9512A460395006D255D /* appView.swift */; };
 		25BBA9542A46056C006D255D /* triangleMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BBA9532A46056C006D255D /* triangleMesh.swift */; };
@@ -47,7 +46,6 @@
 
 /* Begin PBXFileReference section */
 		254735B92A4DD80300A93E55 /* material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = material.swift; sourceTree = "<group>"; };
-		254735BB2A4DE71500A93E55 /* arty.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = arty.jpg; sourceTree = "<group>"; };
 		254735BD2A4DF09F00A93E55 /* Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		25BBA9512A460395006D255D /* appView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = appView.swift; sourceTree = "<group>"; };
 		25BBA9532A46056C006D255D /* triangleMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = triangleMesh.swift; sourceTree = "<group>"; };
@@ -151,7 +149,6 @@
 		25F3C8142A3EE6AD002B4EB2 /* HelloTriangle */ = {
 			isa = PBXGroup;
 			children = (
-				254735BB2A4DE71500A93E55 /* arty.jpg */,
 				25F3C8152A3EE6AD002B4EB2 /* HelloTriangleApp.swift */,
 				25BBA95B2A460DF3006D255D /* LinearAlgebro.swift */,
 				25E9B9592A46D1F500E80325 /* models */,
@@ -296,7 +293,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				25E9B95B2A46D24A00E80325 /* cube.obj in Resources */,
-				254735BC2A4DE71500A93E55 /* arty.jpg in Resources */,
 				25F3C81D2A3EE6AF002B4EB2 /* Preview Assets.xcassets in Resources */,
 				25E9B95D2A46D25600E80325 /* cube.mtl in Resources */,
 				25F3C81A2A3EE6AF002B4EB2 /* Assets.xcassets in Resources */,

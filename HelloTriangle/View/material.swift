@@ -12,16 +12,14 @@ class Material {
     let sampler: MTLSamplerState
     
     init(device: MTLDevice, allocator: MTKTextureLoader, filename: String) {
-        guard let materialURL = Bundle.main.url(forResource: filename, withExtension: "jpg") else {
-            fatalError("Could not load texture file")
-        }
         
         let options: [MTKTextureLoader.Option: Any] = [
-            .SRGB: false
+            .SRGB: false,
+            .generateMipmaps: true
         ]
         
         do {
-            texture = try allocator.newTexture(URL: materialURL, options: options)
+            texture = try allocator.newTexture(name: filename, scaleFactor: 1, bundle: Bundle.main, options: options)
         } catch {
             fatalError("Could not load texture")
         }
