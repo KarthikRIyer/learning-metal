@@ -9,11 +9,10 @@
 /* Begin PBXBuildFile section */
 		254735BA2A4DD80300A93E55 /* material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254735B92A4DD80300A93E55 /* material.swift */; };
 		254735BC2A4DE71500A93E55 /* arty.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 254735BB2A4DE71500A93E55 /* arty.jpg */; };
+		254735BE2A4DF09F00A93E55 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254735BD2A4DF09F00A93E55 /* Entity.swift */; };
 		25BBA9522A460395006D255D /* appView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BBA9512A460395006D255D /* appView.swift */; };
 		25BBA9542A46056C006D255D /* triangleMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BBA9532A46056C006D255D /* triangleMesh.swift */; };
 		25BBA9562A460AE7006D255D /* RenderScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BBA9552A460AE7006D255D /* RenderScene.swift */; };
-		25BBA9582A460BCA006D255D /* camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BBA9572A460BCA006D255D /* camera.swift */; };
-		25BBA95A2A460D1B006D255D /* SimpleComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BBA9592A460D1B006D255D /* SimpleComponent.swift */; };
 		25BBA95C2A460DF3006D255D /* LinearAlgebro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BBA95B2A460DF3006D255D /* LinearAlgebro.swift */; };
 		25E9B95B2A46D24A00E80325 /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 25E9B95A2A46D24A00E80325 /* cube.obj */; };
 		25E9B95D2A46D25600E80325 /* cube.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 25E9B95C2A46D25600E80325 /* cube.mtl */; };
@@ -49,11 +48,10 @@
 /* Begin PBXFileReference section */
 		254735B92A4DD80300A93E55 /* material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = material.swift; sourceTree = "<group>"; };
 		254735BB2A4DE71500A93E55 /* arty.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = arty.jpg; sourceTree = "<group>"; };
+		254735BD2A4DF09F00A93E55 /* Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		25BBA9512A460395006D255D /* appView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = appView.swift; sourceTree = "<group>"; };
 		25BBA9532A46056C006D255D /* triangleMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = triangleMesh.swift; sourceTree = "<group>"; };
 		25BBA9552A460AE7006D255D /* RenderScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderScene.swift; sourceTree = "<group>"; };
-		25BBA9572A460BCA006D255D /* camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = camera.swift; sourceTree = "<group>"; };
-		25BBA9592A460D1B006D255D /* SimpleComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleComponent.swift; sourceTree = "<group>"; };
 		25BBA95B2A460DF3006D255D /* LinearAlgebro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearAlgebro.swift; sourceTree = "<group>"; };
 		25E9B95A2A46D24A00E80325 /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
 		25E9B95C2A46D25600E80325 /* cube.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.mtl; sourceTree = "<group>"; };
@@ -103,8 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				25BBA9552A460AE7006D255D /* RenderScene.swift */,
-				25BBA9572A460BCA006D255D /* camera.swift */,
-				25BBA9592A460D1B006D255D /* SimpleComponent.swift */,
+				254735BD2A4DF09F00A93E55 /* Entity.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -328,15 +325,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				254735BA2A4DD80300A93E55 /* material.swift in Sources */,
-				25BBA9582A460BCA006D255D /* camera.swift in Sources */,
 				25BBA9562A460AE7006D255D /* RenderScene.swift in Sources */,
 				25BBA9522A460395006D255D /* appView.swift in Sources */,
 				25E9B95F2A46D3C800E80325 /* objMesh.swift in Sources */,
 				25F3C8442A3F1CA0002B4EB2 /* Shaders.metal in Sources */,
 				25BBA9542A46056C006D255D /* triangleMesh.swift in Sources */,
 				25F3C8182A3EE6AD002B4EB2 /* ContentView.swift in Sources */,
-				25BBA95A2A460D1B006D255D /* SimpleComponent.swift in Sources */,
 				25BBA95C2A460DF3006D255D /* LinearAlgebro.swift in Sources */,
+				254735BE2A4DF09F00A93E55 /* Entity.swift in Sources */,
 				25F3C8412A3EEA09002B4EB2 /* Renderer.swift in Sources */,
 				25F3C8162A3EE6AD002B4EB2 /* HelloTriangleApp.swift in Sources */,
 			);
