@@ -17,8 +17,10 @@ class Renderer: NSObject, MTKViewDelegate {
     let pipelineState: MTLRenderPipelineState
     let depthStencilState: MTLDepthStencilState
     var scene: RenderScene
-    let mesh: ObjMesh
-    let material: Material
+    let cubeMesh: ObjMesh
+    let groundMesh: ObjMesh
+    let cubeMaterial: Material
+    let woodyMaterial: Material
     
     init(_ parent: ContentView, scene: RenderScene) {
         self.parent = parent
@@ -28,16 +30,18 @@ class Renderer: NSObject, MTKViewDelegate {
         self.metalCommandQueue = metalDevice.makeCommandQueue()
         self.allocator = MTKMeshBufferAllocator(device: metalDevice)
         self.materialLoader = MTKTextureLoader(device: metalDevice)
-        material = Material(device: metalDevice, allocator: materialLoader, filename: "arty")
+        cubeMaterial = Material(device: metalDevice, allocator: materialLoader, filename: "arty")
+        woodyMaterial = Material(device: metalDevice, allocator: materialLoader, filename: "woody")
         
-        mesh = ObjMesh(device: metalDevice, allocator: allocator, filename: "cube")
+        cubeMesh = ObjMesh(device: metalDevice, allocator: allocator, filename: "cube")
+        groundMesh = ObjMesh(device: metalDevice, allocator: allocator, filename: "ground")
         
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         let library = metalDevice.makeDefaultLibrary()
         pipelineDescriptor.vertexFunction = library?.makeFunction(name: "vertexShader")
         pipelineDescriptor.fragmentFunction = library?.makeFunction(name: "fragmentShader")
         pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-        pipelineDescriptor.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(mesh.metalMesh.vertexDescriptor)
+        pipelineDescriptor.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(cubeMesh.metalMesh.vertexDescriptor)
         pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
         
         let depthStencilDescriptor = MTLDepthStencilDescriptor()
@@ -78,16 +82,33 @@ class Renderer: NSObject, MTKViewDelegate {
         cameraData.projection = Matrix44.create_perspective_projection(fovy: 45,
                                                                        aspect: 800/600,
                                                                        near: 0.1,
-                                                                        far: 10)
+                                                                        far: 100)
         renderEncoder?.setVertexBytes(&cameraData, length: MemoryLayout<CameraParameters>.stride, index: 2)
-        renderEncoder?.setVertexBuffer(mesh.metalMesh.vertexBuffers[0].buffer, offset: 0, index: 0)
-        renderEncoder?.setFragmentTexture(material.texture, index: 0)
-        renderEncoder?.setFragmentSamplerState(material.sampler, index: 0)
+        
+        renderEncoder?.setVertexBuffer(cubeMesh.metalMesh.vertexBuffers[0].buffer, offset: 0, index: 0)
+        renderEncoder?.setFragmentTexture(cubeMaterial.texture, index: 0)
+        renderEncoder?.setFragmentSamplerState(cubeMaterial.sampler, index: 0)
         for cube in scene.cubes {
-            
+
             renderEncoder?.setVertexBytes(&(cube.model!), length: MemoryLayout<matrix_float4x4>.stride, index: 1)
-            
-            for submesh in mesh.metalMesh.submeshes {
+
+            for submesh in cubeMesh.metalMesh.submeshes {
+                renderEncoder?.drawIndexedPrimitives(type: .triangle,
+                                                     indexCount: submesh.indexCount,
+                                                     indexType: submesh.indexType,
+                                                     indexBuffer: submesh.indexBuffer.buffer,
+                                                     indexBufferOffset: submesh.indexBuffer.offset)
+            }
+        }
+        
+        renderEncoder?.setVertexBuffer(groundMesh.metalMesh.vertexBuffers[0].buffer, offset: 0, index: 0)
+        renderEncoder?.setFragmentTexture(woodyMaterial.texture, index: 0)
+        renderEncoder?.setFragmentSamplerState(woodyMaterial.sampler, index: 0)
+        for tile in scene.groundTiles {
+
+            renderEncoder?.setVertexBytes(&(tile.model!), length: MemoryLayout<matrix_float4x4>.stride, index: 1)
+
+            for submesh in groundMesh.metalMesh.submeshes {
                 renderEncoder?.drawIndexedPrimitives(type: .triangle,
                                                      indexCount: submesh.indexCount,
                                                      indexType: submesh.indexType,
