@@ -44,4 +44,8 @@ enum LightType {
     POINTLIGHT,
 };
 
+struct FragmentData {
+    uint lightCount;
+};
+
 #endif /* definitions_h */

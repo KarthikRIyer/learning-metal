@@ -97,6 +97,16 @@ class Renderer: NSObject, MTKViewDelegate {
         spotLight.position = scene.spotLight.position!
         renderEncoder?.setFragmentBytes(&spotLight, length: MemoryLayout<SpotLight>.stride, index: 1)
         
+        var pointLights: [PointLight] = []
+        for light in scene.pointLights {
+            pointLights.append(PointLight(position: light.position!, color: light.color))
+        }
+        renderEncoder?.setFragmentBytes(&pointLights, length: MemoryLayout<PointLight>.stride * scene.pointLights.count, index: 2)
+        
+        var fragUBO: FragmentData = FragmentData()
+        fragUBO.lightCount = UInt32(scene.pointLights.count)
+        renderEncoder?.setFragmentBytes(&fragUBO, length: MemoryLayout<FragmentData>.stride, index: 3)
+        
         renderEncoder?.setVertexBuffer(cubeMesh.metalMesh.vertexBuffers[0].buffer, offset: 0, index: 0)
         renderEncoder?.setFragmentTexture(cubeMaterial.texture, index: 0)
         renderEncoder?.setFragmentSamplerState(cubeMaterial.sampler, index: 0)

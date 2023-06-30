@@ -51,33 +51,49 @@ fragment float4 fragmentShader(Fragment input [[stage_in]],
                                texture2d<float> objectTexture [[texture(0)]],
                                sampler samplerObject[[ sampler(0) ]],
                                constant DirectionalLight &sun [[ buffer(0) ]],
-                               constant SpotLight &spotLight [[ buffer(1) ]]) {
+                               constant SpotLight &spotLight [[ buffer(1) ]],
+                               constant PointLight *pointLights [[ buffer(2) ]],
+                               constant FragmentData &fragUBO [[ buffer(3) ]]) {
     float3 baseColor = float3(objectTexture.sample(samplerObject, input.texcoord));
     float3 color = 0.2 * baseColor;
     
-//    //directions
+    //directions
     float3 fragToCamera = normalize(input.cameraPos - input.fragPos);
-//    float3 halfVec = normalize(-sun.forwards + fragToCamera);
-//
-//    //diffuse
-//    float lightAmount = max(0.0, dot(input.normal, -sun.forwards));
-//    color += lightAmount * baseColor * sun.color;
-//
-//    //specular
-//    lightAmount = pow(max(0.0, dot(input.normal, halfVec)), 64);
-//    color += lightAmount * baseColor * sun.color;
+    float3 halfVec = normalize(-sun.forwards + fragToCamera);
+
+    //diffuse
+    float lightAmount = max(0.0, dot(input.normal, -sun.forwards));
+    color += lightAmount * baseColor * sun.color;
+
+    //specular
+    lightAmount = pow(max(0.0, dot(input.normal, halfVec)), 64);
+    color += lightAmount * baseColor * sun.color;
     
     //directions
     float3 fragToLight = normalize(spotLight.position - input.fragPos);
-    float3 halfVec = normalize(fragToLight + fragToCamera);
+    halfVec = normalize(fragToLight + fragToCamera);
     
     //diffuse
-    float lightAmount = max(0.0, dot(input.normal, fragToLight)) * pow(max(0.0, dot(spotLight.forwards, -fragToLight)), 32);
+    lightAmount = max(0.0, dot(input.normal, fragToLight)) * pow(max(0.0, dot(spotLight.forwards, -fragToLight)), 32);
     color += lightAmount * baseColor * spotLight.color;
     
     //specular
-    lightAmount = pow(max(0.0, dot(input.normal, halfVec)), 64);
-//    color += lightAmount * baseColor * sun.color;
+    lightAmount = pow(max(0.0, dot(input.normal, halfVec)), 64) * pow(max(0.0, dot(spotLight.forwards, -fragToLight)), 32);
+    color += lightAmount * baseColor * spotLight.color;
+    
+    for (uint i = 0; i < fragUBO.lightCount; ++i) {
+        //directions
+        float3 fragToLight = normalize(pointLights[i].position - input.fragPos);
+        halfVec = normalize(fragToLight + fragToCamera);
+        
+        //diffuse
+        lightAmount = max(0.0, dot(input.normal, fragToLight));
+        color += lightAmount * baseColor * pointLights[i].color;
+        
+        //specular
+        lightAmount = pow(max(0.0, dot(input.normal, halfVec)), 64);
+        color += lightAmount * baseColor * pointLights[i].color;
+    }
     
     return float4(color, 1.0);
 }
