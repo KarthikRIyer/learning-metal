@@ -91,6 +91,12 @@ class Renderer: NSObject, MTKViewDelegate {
         sun.color = scene.sun.color
         renderEncoder?.setFragmentBytes(&sun, length: MemoryLayout<DirectionalLight>.stride, index: 0)
         
+        var spotLight: SpotLight = SpotLight()
+        spotLight.color = scene.spotLight.color
+        spotLight.forwards = scene.spotLight.forwards!
+        spotLight.position = scene.spotLight.position!
+        renderEncoder?.setFragmentBytes(&spotLight, length: MemoryLayout<SpotLight>.stride, index: 1)
+        
         renderEncoder?.setVertexBuffer(cubeMesh.metalMesh.vertexBuffers[0].buffer, offset: 0, index: 0)
         renderEncoder?.setFragmentTexture(cubeMaterial.texture, index: 0)
         renderEncoder?.setFragmentSamplerState(cubeMaterial.sampler, index: 0)

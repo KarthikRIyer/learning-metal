@@ -26,6 +26,17 @@ struct DirectionalLight {
     vector_float3 color;
 };
 
+struct SpotLight {
+    vector_float3 forwards;
+    vector_float3 position;
+    vector_float3 color;
+};
+
+struct PointLight {
+    vector_float3 position;
+    vector_float3 color;
+};
+
 enum LightType {
     UNDEFINED,
     DIRECTIONAL,

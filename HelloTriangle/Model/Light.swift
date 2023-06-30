@@ -55,7 +55,15 @@ class Light {
                 cos(eulers![1] * .pi / 180.0)
             ]
         } else if type == SPOTLIGHT {
-            
+            eulers![1] += 1
+            if eulers![1] > 360 {
+                eulers! -= 360
+            }
+            forwards = [
+                cos(eulers![2] * .pi / 180.0) * sin(eulers![1] * .pi / 180.0),
+                sin(eulers![2] * .pi / 180.0) * cos(eulers![1] * .pi / 180.0),
+                cos(eulers![1] * .pi / 180.0)
+            ]
         } else if type == POINTLIGHT {
             
         }

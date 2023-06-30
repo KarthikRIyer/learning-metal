@@ -50,19 +50,34 @@ vertex Fragment vertexShader(const VertexIn vertex_in [[ stage_in ]],
 fragment float4 fragmentShader(Fragment input [[stage_in]],
                                texture2d<float> objectTexture [[texture(0)]],
                                sampler samplerObject[[ sampler(0) ]],
-                               constant DirectionalLight &sun [[ buffer(0) ]]) {
+                               constant DirectionalLight &sun [[ buffer(0) ]],
+                               constant SpotLight &spotLight [[ buffer(1) ]]) {
     float3 baseColor = float3(objectTexture.sample(samplerObject, input.texcoord));
     float3 color = 0.2 * baseColor;
     
+//    //directions
+    float3 fragToCamera = normalize(input.cameraPos - input.fragPos);
+//    float3 halfVec = normalize(-sun.forwards + fragToCamera);
+//
+//    //diffuse
+//    float lightAmount = max(0.0, dot(input.normal, -sun.forwards));
+//    color += lightAmount * baseColor * sun.color;
+//
+//    //specular
+//    lightAmount = pow(max(0.0, dot(input.normal, halfVec)), 64);
+//    color += lightAmount * baseColor * sun.color;
+    
+    //directions
+    float3 fragToLight = normalize(spotLight.position - input.fragPos);
+    float3 halfVec = normalize(fragToLight + fragToCamera);
+    
     //diffuse
-    float lightAmount = max(0.0, dot(input.normal, -sun.forwards));
-    color += lightAmount * baseColor * sun.color;
+    float lightAmount = max(0.0, dot(input.normal, fragToLight)) * pow(max(0.0, dot(spotLight.forwards, -fragToLight)), 32);
+    color += lightAmount * baseColor * spotLight.color;
     
     //specular
-    float3 fragToCamera = normalize(input.cameraPos - input.fragPos);
-    float3 halfVec = normalize(-sun.forwards + fragToCamera);
     lightAmount = pow(max(0.0, dot(input.normal, halfVec)), 64);
-    color += lightAmount * baseColor * sun.color;
+//    color += lightAmount * baseColor * sun.color;
     
     return float4(color, 1.0);
 }

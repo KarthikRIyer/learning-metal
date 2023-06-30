@@ -12,6 +12,7 @@ class RenderScene: ObservableObject {
     @Published var cubes: [Entity]
     @Published var groundTiles: [Entity]
     @Published var sun: Light
+    @Published var spotLight: Light
     
     init() {
         cubes = []
@@ -20,6 +21,10 @@ class RenderScene: ObservableObject {
         let newCamera = Entity()
         newCamera.addCameraComponent(position: [-5.0, 2.5, 3.5], eulers: [0.0, 110.0, 40.0])
         camera = newCamera
+        
+        let newSpotLight = Light(color: [1.0, 0.0, 0.0])
+        newSpotLight.setSpotlight(position: [-2.0, 0.0, 2.0], eulers: [0.0, 0.0, 180.0])
+        spotLight = newSpotLight
         
         let newSun = Light(color: [1.0, 1.0, 0.0])
         newSun.setDirectional(eulers: [0.0, 135.0, -45.0])
@@ -48,6 +53,7 @@ class RenderScene: ObservableObject {
         for tile in groundTiles {
             tile.update()
         }
+        spotLight.update()
     }
     
     func spinCamera(offset: CGSize) {
