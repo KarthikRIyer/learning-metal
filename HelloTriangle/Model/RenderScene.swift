@@ -11,14 +11,20 @@ class RenderScene: ObservableObject {
     @Published var camera: Entity
     @Published var cubes: [Entity]
     @Published var groundTiles: [Entity]
+    @Published var sun: Light
     
     init() {
+        cubes = []
+        groundTiles = []
+        
         let newCamera = Entity()
         newCamera.addCameraComponent(position: [-5.0, 2.5, 3.5], eulers: [0.0, 110.0, 40.0])
         camera = newCamera
         
-        cubes = []
-        groundTiles = []
+        let newSun = Light(color: [1.0, 1.0, 0.0])
+        newSun.setDirectional(eulers: [0.0, 135.0, -45.0])
+        sun = newSun
+        sun.update()
         
         let newCube = Entity()
         newCube.addTransformComponent(position: [3.0, 0.0, 0.0], eulers: [0.0, 0.0, 0.0])

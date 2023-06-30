@@ -56,6 +56,7 @@ class Entity {
             up = simd.normalize(simd.cross(forwards!, right!))
             view = Matrix44.create_lookat(eye: position!, target: position! + forwards!, up: up!)
         }
+        
     }
     
 }

@@ -11,6 +11,7 @@
 		254735BE2A4DF09F00A93E55 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254735BD2A4DF09F00A93E55 /* Entity.swift */; };
 		254735C52A4DFB7400A93E55 /* ground.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 254735C32A4DFB7400A93E55 /* ground.mtl */; };
 		254735C62A4DFB7400A93E55 /* ground.obj in Resources */ = {isa = PBXBuildFile; fileRef = 254735C42A4DFB7400A93E55 /* ground.obj */; };
+		254735C82A4EAF5C00A93E55 /* Light.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254735C72A4EAF5C00A93E55 /* Light.swift */; };
 		25BBA9522A460395006D255D /* appView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BBA9512A460395006D255D /* appView.swift */; };
 		25BBA9542A46056C006D255D /* triangleMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BBA9532A46056C006D255D /* triangleMesh.swift */; };
 		25BBA9562A460AE7006D255D /* RenderScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BBA9552A460AE7006D255D /* RenderScene.swift */; };
@@ -51,6 +52,7 @@
 		254735BD2A4DF09F00A93E55 /* Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		254735C32A4DFB7400A93E55 /* ground.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ground.mtl; sourceTree = "<group>"; };
 		254735C42A4DFB7400A93E55 /* ground.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ground.obj; sourceTree = "<group>"; };
+		254735C72A4EAF5C00A93E55 /* Light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Light.swift; sourceTree = "<group>"; };
 		25BBA9512A460395006D255D /* appView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = appView.swift; sourceTree = "<group>"; };
 		25BBA9532A46056C006D255D /* triangleMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = triangleMesh.swift; sourceTree = "<group>"; };
 		25BBA9552A460AE7006D255D /* RenderScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderScene.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 			children = (
 				25BBA9552A460AE7006D255D /* RenderScene.swift */,
 				254735BD2A4DF09F00A93E55 /* Entity.swift */,
+				254735C72A4EAF5C00A93E55 /* Light.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 				25E9B95F2A46D3C800E80325 /* objMesh.swift in Sources */,
 				25F3C8442A3F1CA0002B4EB2 /* Shaders.metal in Sources */,
 				25BBA9542A46056C006D255D /* triangleMesh.swift in Sources */,
+				254735C82A4EAF5C00A93E55 /* Light.swift in Sources */,
 				25F3C8182A3EE6AD002B4EB2 /* ContentView.swift in Sources */,
 				25BBA95C2A460DF3006D255D /* LinearAlgebro.swift in Sources */,
 				254735BE2A4DF09F00A93E55 /* Entity.swift in Sources */,

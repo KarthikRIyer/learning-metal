@@ -79,11 +79,17 @@ class Renderer: NSObject, MTKViewDelegate {
         
         var cameraData: CameraParameters = CameraParameters()
         cameraData.view = scene.camera.view!
+        cameraData.position = scene.camera.position!
         cameraData.projection = Matrix44.create_perspective_projection(fovy: 45,
                                                                        aspect: 800/600,
                                                                        near: 0.1,
                                                                         far: 100)
         renderEncoder?.setVertexBytes(&cameraData, length: MemoryLayout<CameraParameters>.stride, index: 2)
+        
+        var sun: DirectionalLight = DirectionalLight()
+        sun.forwards = scene.sun.forwards!
+        sun.color = scene.sun.color
+        renderEncoder?.setFragmentBytes(&sun, length: MemoryLayout<DirectionalLight>.stride, index: 0)
         
         renderEncoder?.setVertexBuffer(cubeMesh.metalMesh.vertexBuffers[0].buffer, offset: 0, index: 0)
         renderEncoder?.setFragmentTexture(cubeMaterial.texture, index: 0)
