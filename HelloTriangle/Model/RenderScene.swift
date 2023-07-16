@@ -14,7 +14,7 @@ class RenderScene: ObservableObject {
     @Published var maus: Billboard
     @Published var sun: Light
     @Published var spotLight: Light
-    @Published var pointLights: [Light]
+    @Published var pointLights: [BrightBillboard]
     
     init() {
         cubes = []
@@ -37,11 +37,13 @@ class RenderScene: ObservableObject {
         sun = newSun
         sun.update()
         
-        var newPointLight = Light(color: [0.0, 1.0, 1.0])
-        newPointLight.setPointLight(rotationCenter: [0.0, 0.0, 1.0], pathRadius: 2.0, pathPhi: 60.0, angularVelocity: 1.0)
+//        var newPointLight = Light(color: [0.0, 1.0, 1.0])
+        var newPointLight = BrightBillboard(position: [0.0, 0.0, 1.0], color: [0.0, 1.0, 1.0], rotationCenter: [0.0, 0.0, 1.0], pathRadius: 2.0, pathPhi: 60.0, angularVelocity: 1.0)
+//        newPointLight.setPointLight(rotationCenter: [0.0, 0.0, 1.0], pathRadius: 2.0, pathPhi: 60.0, angularVelocity: 1.0)
         pointLights.append(newPointLight)
-        newPointLight = Light(color: [0.0, 0.0, 1.0])
-        newPointLight.setPointLight(rotationCenter: [0.0, 0.0, 1.0], pathRadius: 3.0, pathPhi: 0.0, angularVelocity: 2.0)
+//        newPointLight = Light(color: [0.0, 0.0, 1.0])
+        newPointLight = BrightBillboard(position: [0.0, 0.0, 1.0], color: [0.0, 0.0, 1.0], rotationCenter: [0.0, 0.0, 1.0], pathRadius: 3.0, pathPhi: 0.0, angularVelocity: 2.0)
+//        newPointLight.setPointLight(rotationCenter: [0.0, 0.0, 1.0], pathRadius: 3.0, pathPhi: 0.0, angularVelocity: 2.0)
         pointLights.append(newPointLight)
         
         let newCube = Entity()
@@ -72,7 +74,7 @@ class RenderScene: ObservableObject {
         }
         spotLight.update()
         for pointLight in pointLights {
-            pointLight.update()
+            pointLight.update(viewerPosition: camera.position!)
         }
         maus.update(viewerPos: camera.position!)
         updateView() 

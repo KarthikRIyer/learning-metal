@@ -13,7 +13,7 @@ class ObjMesh {
     
     init(device: MTLDevice, allocator: MTKMeshBufferAllocator, filename: String) {
         guard let meshURL = Bundle.main.url(forResource: filename, withExtension: "obj") else {
-            fatalError("Could not load mesh")
+            fatalError("Could not load mesh \(filename)")
         }
         
         let vertexDescriptor = MTLVertexDescriptor()
