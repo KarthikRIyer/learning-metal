@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import simd 
 
 class Entity {
     var hasTransformComponent: Bool
@@ -28,14 +29,27 @@ class Entity {
         self.hasTransformComponent = true
         self.position = position
         self.eulers = eulers
-        self.model = Matrix44.create_identity()
+//        self.model = Matrix44.create_identity()
+        update()
     }
     
     func addCameraComponent(position: simd_float3, eulers: simd_float3) {
         self.hasCameraComponent = true
         self.position = position
         self.eulers = eulers
-        self.view = Matrix44.create_identity()
+//        self.view = Matrix44.create_identity()
+        update()
+    }
+    
+    func strafe(rightAmount: Float, upAmount: Float) {
+//        let distanceFromOrigin = simd.length(position!)
+        position = position! + rightAmount * right! + upAmount * up!
+        let distanceFromOrigin = simd.length(position!)
+        moveForwards(amount: distanceFromOrigin - 10)
+    }
+    
+    func moveForwards(amount: Float) {
+        position = position! + amount * forwards!
     }
     
     func update() {
@@ -45,16 +59,21 @@ class Entity {
         }
         
         if hasCameraComponent {
-            forwards = [
-                cos(eulers![2] * .pi / 180.0) * sin(eulers![1] * .pi / 180.0),
-                sin(eulers![2] * .pi / 180.0) * cos(eulers![1] * .pi / 180.0),
-                cos(eulers![1] * .pi / 180.0)
-            ]
+//            forwards = [
+//                cos(eulers![2] * .pi / 180.0) * sin(eulers![1] * .pi / 180.0),
+//                sin(eulers![2] * .pi / 180.0) * cos(eulers![1] * .pi / 180.0),
+//                cos(eulers![1] * .pi / 180.0)
+//            ]
+            
+            forwards = simd.normalize([0,0,0] - position!)
             
             let globalUp: vector_float3 = [0.0, 0.0, 1.0]
             right = simd.normalize(simd.cross(globalUp, forwards!))
             up = simd.normalize(simd.cross(forwards!, right!))
-            view = Matrix44.create_lookat(eye: position!, target: position! + forwards!, up: up!)
+            view = Matrix44.create_lookat(eye: position!,
+//                                          target: position! + forwards!,
+                                          target: [0,0,0],
+                                          up: up!)
         }
         
     }

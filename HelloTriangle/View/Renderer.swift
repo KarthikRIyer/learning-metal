@@ -12,15 +12,17 @@ class Renderer: NSObject, MTKViewDelegate {
     var parent: ContentView
     var metalDevice: MTLDevice!
     var metalCommandQueue: MTLCommandQueue!
-    var allocator: MTKMeshBufferAllocator
+    var meshAllocator: MTKMeshBufferAllocator
     let materialLoader: MTKTextureLoader
     let pipelineState: MTLRenderPipelineState
     let depthStencilState: MTLDepthStencilState
     var scene: RenderScene
     let cubeMesh: ObjMesh
     let groundMesh: ObjMesh
+    let mausMesh: ObjMesh
     let cubeMaterial: Material
     let woodyMaterial: Material
+    let mausMaterial: Material
     
     init(_ parent: ContentView, scene: RenderScene) {
         self.parent = parent
@@ -28,19 +30,28 @@ class Renderer: NSObject, MTKViewDelegate {
             self.metalDevice = metalDevice
         }
         self.metalCommandQueue = metalDevice.makeCommandQueue()
-        self.allocator = MTKMeshBufferAllocator(device: metalDevice)
+        self.meshAllocator = MTKMeshBufferAllocator(device: metalDevice)
         self.materialLoader = MTKTextureLoader(device: metalDevice)
         cubeMaterial = Material(device: metalDevice, allocator: materialLoader, filename: "arty")
         woodyMaterial = Material(device: metalDevice, allocator: materialLoader, filename: "woody")
+        mausMaterial = Material(device: metalDevice, allocator: materialLoader, filename: "maus")
         
-        cubeMesh = ObjMesh(device: metalDevice, allocator: allocator, filename: "cube")
-        groundMesh = ObjMesh(device: metalDevice, allocator: allocator, filename: "ground")
+        cubeMesh = ObjMesh(device: metalDevice, allocator: meshAllocator, filename: "cube")
+        groundMesh = ObjMesh(device: metalDevice, allocator: meshAllocator, filename: "ground")
+        mausMesh = ObjMesh(device: metalDevice, allocator: meshAllocator, filename: "mouse")
         
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         let library = metalDevice.makeDefaultLibrary()
         pipelineDescriptor.vertexFunction = library?.makeFunction(name: "vertexShader")
         pipelineDescriptor.fragmentFunction = library?.makeFunction(name: "fragmentShader")
         pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        pipelineDescriptor.colorAttachments[0].isBlendingEnabled = true
+        pipelineDescriptor.colorAttachments[0].alphaBlendOperation = .add
+        pipelineDescriptor.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
+        pipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = .sourceAlpha
+        pipelineDescriptor.colorAttachments[0].rgbBlendOperation = .add
+        pipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
+        pipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = .sourceAlpha
         pipelineDescriptor.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(cubeMesh.metalMesh.vertexDescriptor)
         pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
         
@@ -92,6 +103,9 @@ class Renderer: NSObject, MTKViewDelegate {
         for tile in scene.groundTiles {
             draw(renderEncoder: renderEncoder, mesh: groundMesh, modelTransform: &(tile.model!))
         }
+        
+        armForDrawing(renderEncoder: renderEncoder, mesh: mausMesh, material: mausMaterial)
+        draw(renderEncoder: renderEncoder, mesh: mausMesh, modelTransform: &(scene.maus.model))
         
         renderEncoder?.endEncoding()
         

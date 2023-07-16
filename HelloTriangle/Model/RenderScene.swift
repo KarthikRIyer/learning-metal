@@ -11,6 +11,7 @@ class RenderScene: ObservableObject {
     @Published var camera: Entity
     @Published var cubes: [Entity]
     @Published var groundTiles: [Entity]
+    @Published var maus: Billboard
     @Published var sun: Light
     @Published var spotLight: Light
     @Published var pointLights: [Light]
@@ -23,6 +24,9 @@ class RenderScene: ObservableObject {
         let newCamera = Entity()
         newCamera.addCameraComponent(position: [-5.0, 2.5, 3.5], eulers: [0.0, 110.0, 40.0])
         camera = newCamera
+        
+        let newMaus = Billboard(position: [0.0,0.0,1.7 ])
+        maus = newMaus
         
         let newSpotLight = Light(color: [1.0, 0.0, 0.0])
         newSpotLight.setSpotlight(position: [-2.0, 0.0, 2.0], eulers: [0.0, 0.0, 180.0])
@@ -41,13 +45,17 @@ class RenderScene: ObservableObject {
         pointLights.append(newPointLight)
         
         let newCube = Entity()
-        newCube.addTransformComponent(position: [3.0, 0.0, 0.0], eulers: [0.0, 0.0, 0.0])
+        newCube.addTransformComponent(position: [0.0, 0.0, 0.0], eulers: [0.0, 0.0, 0.0])
         cubes.append(newCube)
         
         
         let newTile = Entity()
-        newTile.addTransformComponent(position: [3.0, 0.0, -1.0], eulers: [90.0, 0.0, 0.0])
+        newTile.addTransformComponent(position: [0.0, 0.0, -1.0001], eulers: [90.0, 0.0, 0.0])
         groundTiles.append(newTile)
+    }
+    
+    func updateView() {
+        self.objectWillChange.send()
     }
     
     func update() {
@@ -66,6 +74,8 @@ class RenderScene: ObservableObject {
         for pointLight in pointLights {
             pointLight.update()
         }
+        maus.update(viewerPos: camera.position!)
+        updateView() 
     }
     
     func spinCamera(offset: CGSize) {
@@ -84,6 +94,15 @@ class RenderScene: ObservableObject {
         } else if camera.eulers!.y > 179 {
             camera.eulers!.y = 179
         }
+        
+//        camera.updateVectors()
+    }
+    
+    func strafeCamera(offset: CGSize) {
+        let rightAmount: Float = Float(offset.width) / 1000
+        let upAmount: Float = Float(offset.height) / 1000
+        
+        camera.strafe(rightAmount: -rightAmount, upAmount: upAmount)
         
 //        camera.updateVectors()
     }
